@@ -9,6 +9,29 @@ const Button = props => {
   );
 };
 
+const Statics = props => {
+  return (
+    <>
+      <p>Statics</p>
+      <div>
+        <div>good: {props.good}</div>
+        <div>neutral: {props.neutral}</div>
+        <div>bad: {props.bad}</div>
+        <div>all: {props.good + props.neutral + props.bad}</div>
+        <div>
+          average:
+          {(props.good * 1 + props.neutral * 0 + props.bad * -1) /
+            (props.good + props.neutral + props.bad)}
+        </div>
+        <div>
+          positive:
+          {(props.good / (props.good + props.neutral + props.bad)) * 100}%
+        </div>
+      </div>
+    </>
+  );
+};
+
 function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -34,18 +57,7 @@ function App() {
           <Button title="Bad" onClick={increment("bad")} />
         </div>
         <br />
-        <p>Statics</p>
-        <div>
-          <div>good: {good}</div>
-          <div>neutral: {neutral}</div>
-          <div>bad: {bad}</div>
-          <div>all: {good + neutral + bad}</div>
-          <div>
-            average:
-            {(good * 1 + neutral * 0 + bad * -1) / (good + neutral + bad)}
-          </div>
-          <div>positive: {(good / (good + neutral + bad)) * 100}%</div>
-        </div>
+        <Statics good={good} neutral={neutral} bad={bad} />
       </header>
     </div>
   );
