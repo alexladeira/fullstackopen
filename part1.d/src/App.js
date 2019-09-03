@@ -10,26 +10,35 @@ const Button = props => {
 };
 
 const Statics = props => {
-  return (
-    <>
-      <p>Statics</p>
-      <div>
-        <div>good: {props.good}</div>
-        <div>neutral: {props.neutral}</div>
-        <div>bad: {props.bad}</div>
-        <div>all: {props.good + props.neutral + props.bad}</div>
+  if (props.good + props.neutral + props.bad > 0) {
+    return (
+      <>
+        <p>Statics</p>
         <div>
-          average:
-          {(props.good * 1 + props.neutral * 0 + props.bad * -1) /
-            (props.good + props.neutral + props.bad)}
+          <div>good: {props.good}</div>
+          <div>neutral: {props.neutral}</div>
+          <div>bad: {props.bad}</div>
+          <div>all: {props.good + props.neutral + props.bad}</div>
+          <div>
+            average:
+            {(props.good * 1 + props.neutral * 0 + props.bad * -1) /
+              (props.good + props.neutral + props.bad)}
+          </div>
+          <div>
+            positive:
+            {(props.good / (props.good + props.neutral + props.bad)) * 100}%
+          </div>
         </div>
-        <div>
-          positive:
-          {(props.good / (props.good + props.neutral + props.bad)) * 100}%
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  } else {
+    return (
+      <>
+        <p>Statics</p>
+        <div>No feedback were given</div>
+      </>
+    );
+  }
 };
 
 function App() {
