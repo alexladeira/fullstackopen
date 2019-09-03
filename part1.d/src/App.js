@@ -14,17 +14,14 @@ function App() {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const incGood = newValue => () => {
-    console.log(newValue);
-    setGood(newValue);
-  };
-
-  const incNeutral = newValue => () => {
-    setNeutral(newValue);
-  };
-
-  const incBad = newValue => () => {
-    setBad(newValue);
+  const increment = opinion => () => {
+    if ("good" === opinion) {
+      setGood(good + 1);
+    } else if ("neutral" === opinion) {
+      setNeutral(neutral + 1);
+    } else {
+      setBad(bad + 1);
+    }
   };
 
   return (
@@ -32,9 +29,9 @@ function App() {
       <header className="App-header">
         <p>Unicafe feedback</p>
         <div>
-          <Button title="Good" onClick={incGood(good + 1)} />
-          <Button title="Neutral" onClick={incNeutral(neutral + 1)} />
-          <Button title="Bad" onClick={incBad(bad + 1)} />
+          <Button title="Good" onClick={increment("good")} />
+          <Button title="Neutral" onClick={increment("neutral")} />
+          <Button title="Bad" onClick={increment("bad")} />
         </div>
         <br />
         <p>Statics</p>
