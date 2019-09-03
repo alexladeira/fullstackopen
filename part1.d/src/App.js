@@ -9,25 +9,41 @@ const Button = props => {
   );
 };
 
-const Statics = props => {
+const Statistic = props => {
+  return (
+    <div>
+      {props.text}: {props.value}
+    </div>
+  );
+};
+
+const Statistics = props => {
   if (props.good + props.neutral + props.bad > 0) {
     return (
       <>
         <p>Statics</p>
         <div>
-          <div>good: {props.good}</div>
-          <div>neutral: {props.neutral}</div>
-          <div>bad: {props.bad}</div>
-          <div>all: {props.good + props.neutral + props.bad}</div>
-          <div>
-            average:
-            {(props.good * 1 + props.neutral * 0 + props.bad * -1) /
-              (props.good + props.neutral + props.bad)}
-          </div>
-          <div>
-            positive:
-            {(props.good / (props.good + props.neutral + props.bad)) * 100}%
-          </div>
+          <Statistic text="good" value={props.good} />
+          <Statistic text="neutral" value={props.neutral} />
+          <Statistic text="bad" value={props.bad} />
+          <Statistic
+            text="all"
+            value={props.good + props.neutral + props.bad}
+          />
+          <Statistic
+            text="average"
+            value={
+              (props.good * 1 + props.neutral * 0 + props.bad * -1) /
+              (props.good + props.neutral + props.bad)
+            }
+          />
+          <Statistic
+            text="positive"
+            value={
+              (props.good / (props.good + props.neutral + props.bad)) * 100 +
+              "%"
+            }
+          />
         </div>
       </>
     );
@@ -66,7 +82,7 @@ function App() {
           <Button title="Bad" onClick={increment("bad")} />
         </div>
         <br />
-        <Statics good={good} neutral={neutral} bad={bad} />
+        <Statistics good={good} neutral={neutral} bad={bad} />
       </header>
     </div>
   );
