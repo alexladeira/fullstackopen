@@ -27,6 +27,17 @@ function App() {
     updateVotes(v);
   };
 
+  const MostVoted = props => {
+    let max = props.votes.indexOf(Math.max(...props.votes));
+
+    return (
+      <div>
+        <p>{anecdotes[max]}</p>
+        <p>has {Math.max(...props.votes)} votes</p>
+      </div>
+    );
+  };
+
   return (
     <div className="App">
       <p>{anecdotes[selected]}</p>
@@ -37,6 +48,7 @@ function App() {
       <button type="button" onClick={next}>
         next anecdote
       </button>
+      <MostVoted votes={votes} anecdotes={anecdotes} />
     </div>
   );
 }
