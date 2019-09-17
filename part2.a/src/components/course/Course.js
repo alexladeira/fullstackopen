@@ -1,26 +1,26 @@
 import React from "react";
 
-const Part = ({ title, exercises }) => (
+const Part = ({ part }) => (
   <div>
     <p>
-      {title} {exercises}
+      {part.title} {part.exercises}
     </p>
   </div>
 );
 
-const Content = props => {
+const Content = ({ parts }) => {
   return (
     <>
-      {props.parts.map(value => (
-        <Part key={value.id} title={value.title} exercises={value.exercises} />
+      {parts.map(el => (
+        <Part key={el.id} part={el} />
       ))}
     </>
   );
 };
 
-const Header = props => (
+const Header = ({ title }) => (
   <div>
-    <p> {props.title} </p>
+    <p> {title} </p>
   </div>
 );
 
