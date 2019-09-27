@@ -1,26 +1,66 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Entries from "./components/Entries";
+import Filter from "./components/Filter";
+import Form from "./components/Form";
+import axios from "axios";
 
-function App() {
+const App = () => {
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [filter, setNewFilter] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios("http://localhost:3001/persons");
+      setPersons(result.data);
+    };
+    fetchData();
+  }, []);
+
+  const handleNewName = event => setNewName(event.target.value);
+
+  const handleNewPhoneNumber = event => setNewPhoneNumber(event.target.value);
+
+  const handleFilter = event => setNewFilter(event.target.value);
+
+  const displayPersons = () =>
+    filter === ""
+      ? persons
+      : persons.filter(
+          el => el.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0
+        );
+
+  const addPhone = event => {
+    event.preventDefault();
+    if (persons.filter(el => el.name === newName).length > 0) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      setPersons(persons.concat({ name: newName, number: newPhoneNumber }));
+      setNewName("");
+      setNewPhoneNumber("");
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Phonebook</h2>
+      <Filter onChange={handleFilter} />
+
+      <h3>Add new contact</h3>
+      <Form
+        addPhone={addPhone}
+        newName={newName}
+        newPhoneNumber={newPhoneNumber}
+        handleNewName={handleNewName}
+        handleNewPhoneNumber={handleNewPhoneNumber}
+      />
+
+      <h3>Numbers</h3>
+      <Entries persons={displayPersons()} />
     </div>
   );
-}
+};
 
 export default App;
