@@ -3,7 +3,7 @@ import "./App.css";
 import Entries from "./components/Entries";
 import Filter from "./components/Filter";
 import Form from "./components/Form";
-import axios from "axios";
+import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,11 +12,7 @@ const App = () => {
   const [filter, setNewFilter] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios("http://localhost:3001/persons");
-      setPersons(result.data);
-    };
-    fetchData();
+    personService.getAll().then(response => setPersons(response));
   }, []);
 
   const handleNewName = event => setNewName(event.target.value);
@@ -34,12 +30,44 @@ const App = () => {
 
   const addPhone = event => {
     event.preventDefault();
-    if (persons.filter(el => el.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`);
+    let newPerson = { name: newName, number: newPhoneNumber };
+    let existingContact = persons.find(el => el.name === newName);
+    if (existingContact) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace de old number with a new one?`
+        )
+      ) {
+        personService
+          .update(existingContact.id, newPerson)
+          .then(response =>
+            setPersons(
+              persons
+                .filter(el => el.id !== existingContact.id)
+                .concat(response)
+            )
+          );
+      }
     } else {
-      setPersons(persons.concat({ name: newName, number: newPhoneNumber }));
-      setNewName("");
-      setNewPhoneNumber("");
+      personService
+        .create(newPerson)
+        .then(response => setPersons(persons.concat(response)));
+    }
+    setNewName("");
+    setNewPhoneNumber("");
+  };
+
+  const remove = id => {
+    if (
+      window.confirm(
+        `Do you really want to remove ${
+          persons.find(el => el.id === id).name
+        } from your phonebook?`
+      )
+    ) {
+      personService
+        .remove(id)
+        .then(response => setPersons(persons.filter(el => el.id !== id)));
     }
   };
 
@@ -58,7 +86,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Entries persons={displayPersons()} />
+      <Entries persons={displayPersons()} removeContact={remove} />
     </div>
   );
 };
